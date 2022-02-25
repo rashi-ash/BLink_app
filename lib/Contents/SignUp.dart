@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'functions/const.dart';
+
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
 
@@ -103,12 +105,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
-          ),
+          decoration:  kTextFieldDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
