@@ -38,7 +38,7 @@ class _StudentProfileEditState extends State<StudentProfileEdit> {
         "GuardianName": gName.text,
         "Department": dept.text,
         "Year": yr.text,
-        " AdmissionNumber": adNo.text,
+        "AdmissionNumber": adNo.text,
       });
 
       Navigator.push(

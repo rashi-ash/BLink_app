@@ -12,66 +12,82 @@ class StudentProfile extends StatefulWidget {
   // final String yearHolder;
   // final String adHolder;
 
-  const StudentProfile(
-      {Key? key,
-      // required this.nameHolder,
-      // required this.parentHolder,
-      // required this.deptHolder,
-      // required this.emailHolder,
-      // required this.yearHolder,
-      // required this.adHolder
-      })
-      : super(key: key);
+  const StudentProfile({
+    Key? key,
+    // required this.nameHolder,
+    // required this.parentHolder,
+    // required this.deptHolder,
+    // required this.emailHolder,
+    // required this.yearHolder,
+    // required this.adHolder
+  }) : super(key: key);
 
   @override
   _StudentProfileState createState() => _StudentProfileState();
 }
 
 class _StudentProfileState extends State<StudentProfile> {
-  String nameHolder="name";
-  String parentHolder="name";
-  String deptHolder="department";
-  String emailHolder="email";
-  String yearHolder="year";
-  String adHolder="adno";
-  final _auth=FirebaseAuth.instance;
-  final _fireStore=FirebaseFirestore.instance;
-  String? loggedUser;
+  String nameHolder = "name";
+  String parentHolder = "name";
+  String deptHolder = "department";
+  String emailHolder = "email";
+  String yearHolder = "year";
+  String adHolder = "adno";
+  final _auth = FirebaseAuth.instance;
+  final _fireStore = FirebaseFirestore.instance;
+  String loggedUser ="no uid";
 
-
-  void getUserID()async{
-    try{
-      final users =await _auth.currentUser;
-      if(users!=null){
-        loggedUser=users.uid;
-        print(loggedUser);
+  void getUserID() {
+    try {
+      final users = _auth.currentUser;
+      if (users != null) {
+        loggedUser = users.uid;
       }
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
-  dynamic getDetails(String user)async{
-    final detail=await _fireStore.collection("users").doc(user).get();
 
-    print(detail);
-    setState(() {
-      nameHolder=detail.data()!['fullName'];
-      parentHolder=detail.data()!['GuardianName'];
-      deptHolder=detail.data()!['Department'];
-      emailHolder=detail.data()!['email'];
-      yearHolder=detail.data()!['Year'];
-      adHolder=detail.data()!['AdmissionNumber'];
+  dynamic getDetails(String user) async {
+    print(user);
+    if(loggedUser.length > 25){
+      final detail = await _fireStore.collection("users").doc(user).get();
+      setState(() {
+        nameHolder = detail.data()?['fullName'] ?? "name";
+        parentHolder = detail.data()?['GuardianName'] ?? "parent name";
+        deptHolder = detail.data()?['Department'] ?? "department";
+        emailHolder = detail.data()?['email'] ?? "email";
+        yearHolder = detail.data()?['Year'] ?? "year";
+        adHolder = detail.data()?['AdmissionNumber'] ?? "admission number";
+      });
+    }else{
+      var message = 'Not loggedIn';
+      final snackBar = SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(
+              color: Color(0xffABAAAA),
+              // color: Color(0xff388A75),y
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w500,
+              fontSize: 15),
+        ),
+        backgroundColor: const Color(0xffF9FFED),
+      );
 
-    });
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserID();
-    getDetails(loggedUser!);
+    getDetails(loggedUser);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -121,14 +137,24 @@ class _StudentProfileState extends State<StudentProfile> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
-                              profileview(text: nameHolder,),
-                              profileview(text: parentHolder,),
-                              profileview(text: emailHolder,),
-                              profileview(text: deptHolder,),
-                              profileview(text: yearHolder,),
-                              profileview(text: adHolder,),
-
+                              ProfileView(
+                                text: nameHolder,
+                              ),
+                              ProfileView(
+                                text: parentHolder,
+                              ),
+                              ProfileView(
+                                text: emailHolder,
+                              ),
+                              ProfileView(
+                                text: deptHolder,
+                              ),
+                              ProfileView(
+                                text: yearHolder,
+                              ),
+                              ProfileView(
+                                text: adHolder,
+                              ),
                             ],
                           ),
                         ),
@@ -201,9 +227,9 @@ class _StudentProfileState extends State<StudentProfile> {
   }
 }
 
-class profileview extends StatelessWidget {
+class ProfileView extends StatelessWidget {
   final String text;
-  const profileview({
+  const ProfileView({
     Key? key,
     required this.text,
   }) : super(key: key);
