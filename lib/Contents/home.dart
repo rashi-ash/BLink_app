@@ -34,7 +34,7 @@ class Landing extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'images/Landing-page.png',
+                  'images/landing-page.png',
                   height: 320.0,
                   fit: BoxFit.fill,
                 ),

@@ -78,22 +78,23 @@ class _StudentLoginState extends State<StudentLogin> {
                       const SizedBox(
                         height: 80,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          Text(
-                            'Login',
-                            style: TextStyle(
-                                color: Color(0xffABAAAA),
-                                // color: Color(0xff388A75),
-                                fontFamily: 'Roboto',
-                                fontSize: 20),
-                          ),
-                          SizedBox(
-                            width: 40,
-                          )
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: const [
+                      //     Text(
+                      //       'Login',
+                      //       style: TextStyle(
+                      //           color: Color(0xffABAAAA),
+                      //           // color: Color(0xff388A75),
+                      //           fontFamily: 'Roboto',
+                      //           fontSize: 20),
+                      //     ),
+                      //     SizedBox(
+                      //       width: 40,
+                      //     )
+                      //   ],
+                      // ),
+                      login,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
