@@ -1,5 +1,8 @@
 import 'package:blink/Contents/teacher-profile-edit.dart';
 import 'package:flutter/material.dart';
+import 'package:blink/Contents/functions/profileView.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TeacherProfile extends StatefulWidget {
   const TeacherProfile({Key? key}) : super(key: key);
@@ -9,6 +12,66 @@ class TeacherProfile extends StatefulWidget {
 }
 
 class _TeacherProfileState extends State<TeacherProfile> {
+  String nameHolder = "name";
+  String altMobileHolder = "0000000000";
+  String deptHolder = "department";
+  String emailHolder = "email";
+  String subjectHolder = "subject";
+  String mobileHolder = "0000000000";
+  final _auth = FirebaseAuth.instance;
+  final _fireStore = FirebaseFirestore.instance;
+  String loggedUser ="no uid";
+
+  void getUserID() {
+    try {
+      final users = _auth.currentUser;
+      if (users != null) {
+        loggedUser = users.uid;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  dynamic getDetails(String user) async {
+    print(user);
+    if(loggedUser.length > 25){
+      final detail = await _fireStore.collection("users").doc(user).get();
+      setState(() {
+        nameHolder = detail.data()?['fullName'] ?? "name";
+        emailHolder = detail.data()?['email'] ?? "email";
+        deptHolder = detail.data()?['Department'] ?? "department";
+        subjectHolder=detail.data()?['Subject'] ?? "subject";
+        mobileHolder = detail.data()?['phone'] ?? "phone";
+        altMobileHolder = detail.data()?['AlternateMobileNumber'] ?? "AlternateMobileNumber";
+      });
+    }else{
+      var message = 'Not loggedIn';
+      final snackBar = SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(
+              color: Color(0xffABAAAA),
+              // color: Color(0xff388A75),y
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w500,
+              fontSize: 15),
+        ),
+        backgroundColor: const Color(0xffF9FFED),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
+  }
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserID();
+    getDetails(loggedUser);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,79 +122,98 @@ class _TeacherProfileState extends State<TeacherProfile> {
                         height: 345,
                         width: 100,
                         child: Padding(
-                          padding: const EdgeInsets.all(40),
+                          padding: const EdgeInsets.fromLTRB(40, 40, 40, 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Full Name',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
+                            children: [
+                              ProfileView(
+                                text: nameHolder,
                               ),
-                              SizedBox(
-                                height: 30,
+                              ProfileView(
+                                text: emailHolder,
                               ),
-                              Text(
-                                'example@gmail.com',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
+                              ProfileView(
+                                text: deptHolder,
                               ),
-                              SizedBox(
-                                height: 30,
+                              ProfileView(
+                                text: subjectHolder,
                               ),
-                              Text(
-                                'Department',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
+                              ProfileView(
+                                text: mobileHolder,
                               ),
-                              SizedBox(
-                                height: 30,
+                              ProfileView(
+                                text: altMobileHolder,
                               ),
-                              Text(
-                                'Subject',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Mobile No',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Alternative Mobile No',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
-                              ),
+
+                              // Text(
+                              //   'Full Name',
+                              //   style: TextStyle(
+                              //       color: Color(0xff5a5959),
+                              //       // color: Color(0xff388A75),
+                              //       fontFamily: 'Rockwell',
+                              //       fontSize: 20,
+                              //       fontWeight: FontWeight.normal),
+                              // ),
+                              // SizedBox(
+                              //   height: 30,
+                              // ),
+                              // Text(
+                              //   'example@gmail.com',
+                              //   style: TextStyle(
+                              //       color: Color(0xff5a5959),
+                              //       // color: Color(0xff388A75),
+                              //       fontFamily: 'Rockwell',
+                              //       fontSize: 20,
+                              //       fontWeight: FontWeight.normal),
+                              // ),
+                              // SizedBox(
+                              //   height: 30,
+                              // ),
+                              // Text(
+                              //   'Department',
+                              //   style: TextStyle(
+                              //       color: Color(0xff5a5959),
+                              //       // color: Color(0xff388A75),
+                              //       fontFamily: 'Rockwell',
+                              //       fontSize: 20,
+                              //       fontWeight: FontWeight.normal),
+                              // ),
+                              // SizedBox(
+                              //   height: 30,
+                              // ),
+                              // Text(
+                              //   'Subject',
+                              //   style: TextStyle(
+                              //       color: Color(0xff5a5959),
+                              //       // color: Color(0xff388A75),
+                              //       fontFamily: 'Rockwell',
+                              //       fontSize: 20,
+                              //       fontWeight: FontWeight.normal),
+                              // ),
+                              // SizedBox(
+                              //   height: 30,
+                              // ),
+                              // Text(
+                              //   'Mobile No',
+                              //   style: TextStyle(
+                              //       color: Color(0xff5a5959),
+                              //       // color: Color(0xff388A75),
+                              //       fontFamily: 'Rockwell',
+                              //       fontSize: 20,
+                              //       fontWeight: FontWeight.normal),
+                              // ),
+                              // SizedBox(
+                              //   height: 30,
+                              // ),
+                              // Text(
+                              //   'Alternative Mobile No',
+                              //   style: TextStyle(
+                              //       color: Color(0xff5a5959),
+                              //       // color: Color(0xff388A75),
+                              //       fontFamily: 'Rockwell',
+                              //       fontSize: 20,
+                              //       fontWeight: FontWeight.normal),
+                              // ),
                             ],
                           ),
                         ),
@@ -141,21 +223,23 @@ class _TeacherProfileState extends State<TeacherProfile> {
                       height: 15,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10,left: 10,right: 10),
+                      padding:
+                          const EdgeInsets.only(top: 10, left: 10, right: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 10, left: 25),
+                            padding:
+                                const EdgeInsets.only(bottom: 10, left: 25),
                             child: TextButton(
                               onPressed: () {
-                              //  Navigator.pushNamed(context, '/TeacherProfileEdit');
+                                //  Navigator.pushNamed(context, '/TeacherProfileEdit');
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: ((context) => const TeacherProfileEdit())
-                                    ));
+                                        builder: ((context) =>
+                                            const TeacherProfileEdit())));
                               },
                               child: const Text(
                                 ' Edit Profile',
@@ -168,11 +252,13 @@ class _TeacherProfileState extends State<TeacherProfile> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
                                   textStyle: const TextStyle(
-                                      fontSize: 19, fontWeight: FontWeight.w800)),
+                                      fontSize: 19,
+                                      fontWeight: FontWeight.w800)),
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 10, right: 15),
+                            padding:
+                                const EdgeInsets.only(bottom: 10, right: 15),
                             child: TextButton(
                               onPressed: () {
                                 //Navigator.pushNamed(context, '/StudentProfile');

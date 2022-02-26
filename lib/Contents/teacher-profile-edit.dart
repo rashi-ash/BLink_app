@@ -1,5 +1,8 @@
 import 'package:blink/Contents/teachers-profile-view.dart';
 import 'package:flutter/material.dart';
+import 'package:blink/Contents/functions/sform.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 class TeacherProfileEdit extends StatefulWidget {
   const TeacherProfileEdit({Key? key}) : super(key: key);
 
@@ -8,6 +11,47 @@ class TeacherProfileEdit extends StatefulWidget {
 }
 
 class _TeacherProfileEditState extends State<TeacherProfileEdit> {
+  final _auth = FirebaseAuth.instance;
+  final _fireStore = FirebaseFirestore.instance;
+  String? loggedUser;
+
+  final name = TextEditingController();
+  final emails = TextEditingController();
+  final subject = TextEditingController();
+  final mobile = TextEditingController();
+  final altMobile = TextEditingController();
+  final dept = TextEditingController();
+  getItemAndNavigate(BuildContext context) {
+    try {
+      final details = _fireStore.collection("users").doc(loggedUser).update({
+        "Department": dept.text,
+        "Subject": subject.text,
+        "AlternateMobileNumber": mobile.text,
+      });
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: ((context) => TeacherProfile())));
+    } catch (e) {
+      print(e);
+    }
+  }
+  void getUserID() async {
+    try {
+      final users = await _auth.currentUser;
+      if (users != null) {
+        loggedUser = users.uid;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserID();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,106 +93,40 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                          top: 45, bottom: 5, left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
-                          hintText: "Full Name",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.39),
-                        ),
-                        keyboardType: TextInputType.name,
+                          top: 50, bottom: 10, left: 50, right: 50),
+                      child: Formfield(
+                          controllers: name,
+                          hintText: "full name",
+                          type: TextInputType.name),
+                    ),
+                    Padding(
+                      padding:
+                      const EdgeInsets.only(top: 5, left: 50, right: 50),
+                      child: Formfield(
+                        controllers: emails,
+                        hintText: "Email",
+                        type: TextInputType.emailAddress,
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                          top: 5,  left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
-                          hintText: "Email",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.38),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
-                        obscureText: true,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 50, right: 50, top: 10, bottom: 10),
+                          left: 50, right: 50, top: 10, bottom: 10),
                       child: Row(
                         children: [
                           Expanded(
-                            child: TextField(
-                              cursorColor: const Color(0xff46665E),
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 20),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: const BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  ),
-                                ),
-                                filled: true,
-                                hintStyle:
-                                const TextStyle(color: Color(0xffABAAAA)),
-                                hintText: "Department",
-                                fillColor:
-                                const Color(0xffFDF9F9).withOpacity(0.39),
-                              ),
-                              keyboardType: TextInputType.name,
+                            child: Formfield(
+                              controllers: dept,
+                              hintText: "Department",
+                              type: TextInputType.name,
                             ),
                           ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
-                              child: TextField(
-                                cursorColor: const Color(0xff46665E),
-
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 30, vertical: 20),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    borderSide: const BorderSide(
-                                      width: 0,
-                                      style: BorderStyle.none,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  hintStyle:
-                                  const TextStyle(color: Color(0xffABAAAA)),
-                                  hintText: "Subject",
-                                  fillColor:
-                                  const Color(0xffFDF9F9).withOpacity(0.39),
-                                ),
-                                keyboardType: TextInputType.text,
+                              child: Formfield(
+                                controllers: subject,
+                                hintText: "Subject",
+                                type: TextInputType.number,
                               ),
                             ),
                           ),
@@ -157,54 +135,22 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                           bottom: 10, left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
-                          hintText: "Mobile Number",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.39),
-                        ),
-                        keyboardType: TextInputType.phone,
+                          bottom: 10, left: 50, right: 50),
+                      child: Formfield(
+                        controllers: mobile,
+                        hintText: "mobile number",
+                        type: TextInputType.number,
                       ),
                     ),
 
 
                     Padding(
                       padding: const EdgeInsets.only(
-                          bottom: 5, left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
-                          hintText: "Alternative Mobile number",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.35),
-                        ),
-                        keyboardType: TextInputType.phone,
+                          bottom: 10, left: 50, right: 50),
+                      child: Formfield(
+                        controllers: altMobile,
+                        hintText: "Alternate mobile number",
+                        type: TextInputType.number,
                       ),
                     ),
                     Row(
@@ -217,11 +163,12 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
                           child: TextButton(
                             onPressed: () {
                               //Navigator.pushNamed(context, '/TeacherProfile');
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: ((context) => const TeacherProfile())
-                                  ));
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: ((context) => const TeacherProfile())
+                              //     ));
+                              getItemAndNavigate(context);
                             },
                             child: const Icon(Icons.arrow_forward_rounded,
                                 size: 30, color: Colors.white),
