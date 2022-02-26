@@ -1,5 +1,8 @@
 import 'package:blink/Contents/parent-profile-view.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'functions/const.dart';
 
 class ParentProfileEdit extends StatefulWidget {
   const ParentProfileEdit({Key? key}) : super(key: key);
@@ -9,17 +12,13 @@ class ParentProfileEdit extends StatefulWidget {
 }
 
 class _ParentProfileEditState extends State<ParentProfileEdit> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
-          ),
+          decoration: kTextFieldDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [

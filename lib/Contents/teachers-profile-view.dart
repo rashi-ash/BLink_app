@@ -4,6 +4,8 @@ import 'package:blink/Contents/functions/profileView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'functions/const.dart';
+
 class TeacherProfile extends StatefulWidget {
   const TeacherProfile({Key? key}) : super(key: key);
 
@@ -21,6 +23,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
   final _auth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance;
   String loggedUser ="no uid";
+
 
   void getUserID() {
     try {
@@ -77,12 +80,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
-          ),
+          decoration: kTextFieldDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -106,9 +104,9 @@ class _TeacherProfileState extends State<TeacherProfile> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundColor: Color(0xffFDF9F9),
+                    CircleAvatar(
+                      radius: 55,
+                      child: Image.asset('images/teacher-profile.png'),
                     ),
                     const SizedBox(
                       height: 40,
@@ -145,75 +143,6 @@ class _TeacherProfileState extends State<TeacherProfile> {
                                 text: altMobileHolder,
                               ),
 
-                              // Text(
-                              //   'Full Name',
-                              //   style: TextStyle(
-                              //       color: Color(0xff5a5959),
-                              //       // color: Color(0xff388A75),
-                              //       fontFamily: 'Rockwell',
-                              //       fontSize: 20,
-                              //       fontWeight: FontWeight.normal),
-                              // ),
-                              // SizedBox(
-                              //   height: 30,
-                              // ),
-                              // Text(
-                              //   'example@gmail.com',
-                              //   style: TextStyle(
-                              //       color: Color(0xff5a5959),
-                              //       // color: Color(0xff388A75),
-                              //       fontFamily: 'Rockwell',
-                              //       fontSize: 20,
-                              //       fontWeight: FontWeight.normal),
-                              // ),
-                              // SizedBox(
-                              //   height: 30,
-                              // ),
-                              // Text(
-                              //   'Department',
-                              //   style: TextStyle(
-                              //       color: Color(0xff5a5959),
-                              //       // color: Color(0xff388A75),
-                              //       fontFamily: 'Rockwell',
-                              //       fontSize: 20,
-                              //       fontWeight: FontWeight.normal),
-                              // ),
-                              // SizedBox(
-                              //   height: 30,
-                              // ),
-                              // Text(
-                              //   'Subject',
-                              //   style: TextStyle(
-                              //       color: Color(0xff5a5959),
-                              //       // color: Color(0xff388A75),
-                              //       fontFamily: 'Rockwell',
-                              //       fontSize: 20,
-                              //       fontWeight: FontWeight.normal),
-                              // ),
-                              // SizedBox(
-                              //   height: 30,
-                              // ),
-                              // Text(
-                              //   'Mobile No',
-                              //   style: TextStyle(
-                              //       color: Color(0xff5a5959),
-                              //       // color: Color(0xff388A75),
-                              //       fontFamily: 'Rockwell',
-                              //       fontSize: 20,
-                              //       fontWeight: FontWeight.normal),
-                              // ),
-                              // SizedBox(
-                              //   height: 30,
-                              // ),
-                              // Text(
-                              //   'Alternative Mobile No',
-                              //   style: TextStyle(
-                              //       color: Color(0xff5a5959),
-                              //       // color: Color(0xff388A75),
-                              //       fontFamily: 'Rockwell',
-                              //       fontSize: 20,
-                              //       fontWeight: FontWeight.normal),
-                              // ),
                             ],
                           ),
                         ),

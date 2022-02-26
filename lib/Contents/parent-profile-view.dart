@@ -1,5 +1,8 @@
 import 'package:blink/Contents/parent-profile-edit.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'functions/const.dart';
 class ParentProfile extends StatefulWidget {
   const ParentProfile({Key? key}) : super(key: key);
 
@@ -13,12 +16,7 @@ class _ParentProfileState extends State<ParentProfile> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
-          ),
+          decoration:kTextFieldDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
