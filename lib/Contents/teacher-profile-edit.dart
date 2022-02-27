@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'package:blink/Contents/signup_controller.dart';
 import 'package:blink/Contents/teachers-profile-view.dart';
 import 'package:flutter/material.dart';
 import 'package:blink/Contents/functions/sform.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'functions/const.dart';
 class TeacherProfileEdit extends StatefulWidget {
   const TeacherProfileEdit({Key? key}) : super(key: key);
 
@@ -14,6 +19,13 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
   final _auth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance;
   String? loggedUser;
+
+
+  File? pickedFile;
+  ImagePicker imagePicker = ImagePicker();
+
+  SignUpController signUpController = Get.find();
+
 
   final name = TextEditingController();
   final emails = TextEditingController();
@@ -30,7 +42,7 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
       });
 
       Navigator.push(
-          context, MaterialPageRoute(builder: ((context) => TeacherProfile())));
+          context, MaterialPageRoute(builder: ((context) => const TeacherProfile())));
     } catch (e) {
       print(e);
     }
@@ -57,12 +69,7 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
-          ),
+          decoration: kTextFieldDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -87,10 +94,62 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
                     const SizedBox(
                       height: 20,
                     ),
-                     CircleAvatar(
-                      radius: 40,
-                      backgroundColor: const Color(0xffFDF9F9).withOpacity(0.99),
+                    Center(
+                      child: Stack(
+                        children: [
+                          const SizedBox(
+                            width: 115,
+                            height: 100,
+                          ),
+                          Obx(() => CircleAvatar(
+                            radius: 55,
+                            backgroundImage:
+                            signUpController.isProficPicPathSet.value ==
+                                true
+                                ? FileImage(File(signUpController
+                                .profilePicPath
+                                .value)) as ImageProvider
+                                : const AssetImage(
+                                'images/teacher-profile.png'),
+                          )),
+                          Positioned(
+                            bottom: 6,
+                            right: 3,
+                            child: ClipOval(
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                color: const Color(0xff00B8B8),
+                                child: InkWell(
+                                  child: const Icon(
+                                    Icons.camera_alt_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor:
+                                        const Color(0xffF7FFE8),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(30),
+                                          ),
+                                        ),
+                                        builder: (context) =>
+                                            bottomSheet(context));
+                                  },
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
+                    //  CircleAvatar(
+                    //   radius: 40,
+                    //   backgroundColor: const Color(0xffFDF9F9).withOpacity(0.99),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 50, bottom: 10, left: 50, right: 50),
@@ -191,3 +250,78 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
     );
   }
 }
+
+Widget bottomSheet(BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+  return Container(
+    width: double.infinity,
+    height: size.height * 0.2,
+    margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+    child: Column(
+      children: [
+        const Text(
+          'Choose Profile Photo',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.image, size: 35),
+                  ),
+                  Text(
+                    'Gallery',
+                    style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  )
+                ],
+              ),
+              onTap: () {
+                takephoto(ImageSource.gallery);
+              },
+            ),
+            const SizedBox(
+              width: 70,
+            ),
+            InkWell(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.camera_alt, size: 35),
+                  ),
+                  Text(
+                    'Camera',
+                    style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  )
+                ],
+              ),
+              onTap: () {
+                takephoto(ImageSource.camera);
+              },
+            )
+          ],
+        )
+      ],
+    ),
+  );
+}
+
+Future<void> takephoto(ImageSource source) async {
+  dynamic imagePicker;
+  final pickedImage = await imagePicker.pickImage(source: source, imageQuality: 100);
+  var pickedFile = File(pickedImage!.path);
+  dynamic signUpController;
+  signUpController.setProfileImagePath(pickedFile.path);
+}
+

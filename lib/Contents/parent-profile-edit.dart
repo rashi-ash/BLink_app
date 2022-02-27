@@ -1,9 +1,5 @@
 import 'package:blink/Contents/parent-profile-view.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:blink/Contents/functions/sform.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:blink/Contents/parent-profile-view.dart';
 
 class ParentProfileEdit extends StatefulWidget {
   const ParentProfileEdit({Key? key}) : super(key: key);
@@ -13,8 +9,8 @@ class ParentProfileEdit extends StatefulWidget {
 }
 
 class _ParentProfileEditState extends State<ParentProfileEdit> {
-  final _auth = FirebaseAuth.instance;
-  final _fireStore = FirebaseFirestore.instance;
+
+
   String? loggedUser;
   final name = TextEditingController();
   final occupation = TextEditingController();
@@ -23,7 +19,7 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
   final mobile = TextEditingController();
   getItemAndNavigate(BuildContext context) {
     try {
-      final details = _fireStore.collection("users").doc(loggedUser).update({
+
         "Occupation": occupation.text,
         "Relationship": relationship.text,
         "AlternateMobileNumber": altMobile.text,
@@ -40,7 +36,7 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
     try {
       final users = await _auth.currentUser;
       if (users != null) {
-        loggedUser = users.uid;
+
       }
     } catch (e) {
       print(e);
@@ -54,17 +50,13 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
     getUserID();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
-          ),
+          decoration: kTextFieldDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
