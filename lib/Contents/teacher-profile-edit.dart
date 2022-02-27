@@ -26,7 +26,7 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
       final details = _fireStore.collection("users").doc(loggedUser).update({
         "Department": dept.text,
         "Subject": subject.text,
-        "AlternateMobileNumber": mobile.text,
+        "AlternateMobileNumber": altMobile.text,
       });
 
       Navigator.push(

@@ -1,5 +1,8 @@
 import 'package:blink/Contents/parent-profile-edit.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blink/Contents/functions/profileView.dart';
 class ParentProfile extends StatefulWidget {
   const ParentProfile({Key? key}) : super(key: key);
 
@@ -8,6 +11,61 @@ class ParentProfile extends StatefulWidget {
 }
 
 class _ParentProfileState extends State<ParentProfile> {
+  String nameHolder = "name";
+  String occupationHolder = "Occupation";
+  String relationshipHolder = "Relationship";
+  String mobileHolder = "Mobile number";
+  String alternateMobileHolder = "Alternate Mobile number";
+  final _auth = FirebaseAuth.instance;
+  final _fireStore = FirebaseFirestore.instance;
+  String loggedUser ="no uid";
+  void getUserID() {
+    try {
+      final users = _auth.currentUser;
+      if (users != null) {
+        loggedUser = users.uid;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  dynamic getDetails(String user) async {
+    print(user);
+    if(loggedUser.length > 25){
+      final detail = await _fireStore.collection("users").doc(user).get();
+      setState(() {
+        nameHolder = detail.data()?['fullName'] ?? "name";
+        occupationHolder = detail.data()?['Occupation'] ?? "Occupation";
+        relationshipHolder = detail.data()?['Relationship'] ?? "Relationship";
+        mobileHolder = detail.data()?['phone'] ?? "phone";
+        alternateMobileHolder = detail.data()?['AlternateMobileNumber'] ?? "AlternateMobileNumber";
+      });
+    }else{
+      var message = 'Not loggedIn';
+      final snackBar = SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(
+              color: Color(0xffABAAAA),
+              // color: Color(0xff388A75),y
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w500,
+              fontSize: 15),
+        ),
+        backgroundColor: const Color(0xffF9FFED),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
+
+  }
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserID();
+    getDetails(loggedUser);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,75 +119,21 @@ class _ParentProfileState extends State<ParentProfile> {
                           padding: const EdgeInsets.all(40),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Full Name',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
+                            children:  [
+                              ProfileView(
+                                text: nameHolder,
                               ),
-                              SizedBox(
-                                height: 30,
+                              ProfileView(
+                                text: occupationHolder,
                               ),
-                              Text(
-                                'Occupation',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
+                              ProfileView(
+                                text: relationshipHolder,
                               ),
-                              SizedBox(
-                                height: 30,
+                              ProfileView(
+                                text: mobileHolder,
                               ),
-                              Text(
-                                'Father Name',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Mother Name',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Mobile No',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                'Alternative Mobile No',
-                                style: TextStyle(
-                                    color: Color(0xff5a5959),
-                                    // color: Color(0xff388A75),
-                                    fontFamily: 'Rockwell',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.normal),
+                              ProfileView(
+                                text: alternateMobileHolder,
                               ),
                             ],
                           ),

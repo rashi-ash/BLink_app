@@ -29,7 +29,7 @@ class StudentProfile extends StatefulWidget {
 
 class _StudentProfileState extends State<StudentProfile> {
   String nameHolder = "name";
-  String parentHolder = "name";
+  String parentHolder = "parent name";
   String deptHolder = "department";
   String emailHolder = "email";
   String yearHolder = "year";
