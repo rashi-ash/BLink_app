@@ -2,7 +2,7 @@ import 'package:blink/Contents/parent-profile-edit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:blink/Contents/functions/profileView.dart';
 class ParentProfile extends StatefulWidget {
   const ParentProfile({Key? key}) : super(key: key);
 
@@ -59,7 +59,7 @@ class _ParentProfileState extends State<ParentProfile> {
     }
 
   }
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
@@ -71,7 +71,12 @@ class _ParentProfileState extends State<ParentProfile> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration:kTextFieldDecoration,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
