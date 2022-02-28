@@ -18,14 +18,16 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
   String? loggedUser;
   final name = TextEditingController();
   final occupation = TextEditingController();
-  final relationship = TextEditingController();
+  final father = TextEditingController();
+  final mother = TextEditingController();
   final altMobile = TextEditingController();
   final mobile = TextEditingController();
   getItemAndNavigate(BuildContext context) {
     try {
       final details = _fireStore.collection("users").doc(loggedUser).update({
         "Occupation": occupation.text,
-        "Relationship": relationship.text,
+        "Father": father.text,
+        "Mother": mother.text,
         "AlternateMobileNumber": altMobile.text,
       });
 
@@ -111,11 +113,28 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                          top: 5, bottom: 10, left: 50, right: 50),
-                      child: Formfield(
-                          controllers: relationship,
-                          hintText: "Relationship with the student",
-                          type: TextInputType.name),
+                          left: 50, right: 50, top: 10, bottom: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Formfield(
+                              controllers: father,
+                              hintText: "Father",
+                              type: TextInputType.name,
+                            ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Formfield(
+                                controllers: mother,
+                                hintText: "Mother",
+                                type: TextInputType.number,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
