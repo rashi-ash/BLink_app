@@ -1,4 +1,4 @@
-import 'package:blink/Contents/Dashboard/NoticeCard.dart';
+import 'package:blink/Contents/functions/NoticeCard.dart';
 import 'package:blink/Contents/Functions/const.dart';
 import 'package:flutter/material.dart';
 

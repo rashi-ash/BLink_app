@@ -4,7 +4,7 @@ import 'package:blink/Contents/student.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:blink/Contents/chat.dart';
+import 'package:blink/Contents/Dashboard/Chat/chat.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

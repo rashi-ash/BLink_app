@@ -1,3 +1,4 @@
+import 'package:blink/Contents/Dashboard/Chat/chat.dart';
 import 'package:flutter/material.dart';
 
 class StudentListCard extends StatelessWidget {
@@ -68,7 +69,12 @@ class StudentListCard extends StatelessWidget {
                     width: 40,
                   ),
                   TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Chat()),
+                        );
+                      },
                       child: const Icon(
                         Icons.arrow_forward_ios_rounded,
                         color: Color(0xffCDC2C2),
