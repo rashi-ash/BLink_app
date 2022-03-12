@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:blink/Contents/functions/profileView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'Dashboard/Teacher/TeacherSideBarLayout.dart';
 import 'functions/const.dart';
 
@@ -23,8 +22,7 @@ class _TeacherProfileState extends State<TeacherProfile> {
   String mobileHolder = "0000000000";
   final _auth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance;
-  String loggedUser ="no uid";
-
+  String loggedUser = "no uid";
 
   void getUserID() {
     try {
@@ -39,17 +37,18 @@ class _TeacherProfileState extends State<TeacherProfile> {
 
   dynamic getDetails(String user) async {
     print(user);
-    if(loggedUser.length > 25){
+    if (loggedUser.length > 25) {
       final detail = await _fireStore.collection("users").doc(user).get();
       setState(() {
         nameHolder = detail.data()?['fullName'] ?? "name";
         emailHolder = detail.data()?['email'] ?? "email";
         deptHolder = detail.data()?['Department'] ?? "department";
-        subjectHolder=detail.data()?['Subject'] ?? "subject";
+        subjectHolder = detail.data()?['Subject'] ?? "subject";
         mobileHolder = detail.data()?['phone'] ?? "phone";
-        altMobileHolder = detail.data()?['AlternateMobileNumber'] ?? "AlternateMobileNumber";
+        altMobileHolder =
+            detail.data()?['AlternateMobileNumber'] ?? "AlternateMobileNumber";
       });
-    }else{
+    } else {
       var message = 'Not loggedIn';
       final snackBar = SnackBar(
         content: Text(
@@ -66,16 +65,16 @@ class _TeacherProfileState extends State<TeacherProfile> {
 
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-
   }
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUserID();
     getDetails(loggedUser);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,7 +142,6 @@ class _TeacherProfileState extends State<TeacherProfile> {
                               ProfileView(
                                 text: altMobileHolder,
                               ),
-
                             ],
                           ),
                         ),

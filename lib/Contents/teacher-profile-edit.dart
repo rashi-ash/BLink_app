@@ -185,7 +185,7 @@ class _TeacherProfileEditState extends State<TeacherProfileEdit> {
                               child: Formfield(
                                 controllers: subject,
                                 hintText: "Subject",
-                                type: TextInputType.number,
+                                type: TextInputType.name,
                               ),
                             ),
                           ),

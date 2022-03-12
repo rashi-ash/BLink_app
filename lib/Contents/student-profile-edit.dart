@@ -190,7 +190,7 @@ class _StudentProfileEditState extends State<StudentProfileEdit> {
                               child: Formfield(
                                 controllers: yr,
                                 hintText: "Year",
-                                type: TextInputType.number,
+                                type: TextInputType.name,
                               ),
                             ),
                           ),
