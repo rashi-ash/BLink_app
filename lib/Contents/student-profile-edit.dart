@@ -34,7 +34,7 @@ class _StudentProfileEditState extends State<StudentProfileEdit> {
   final dept = TextEditingController();
   getItemAndNavigate(BuildContext context) {
     try {
-      final details = _fireStore.collection("users").doc(loggedUser).update({
+      final details = _fireStore.collection("students").doc(loggedUser).update({
         "GuardianName": gName.text,
         "Department": dept.text,
         "Year": yr.text,

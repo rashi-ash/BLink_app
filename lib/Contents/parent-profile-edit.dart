@@ -35,7 +35,7 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
   final altmobile = TextEditingController();
   getItemAndNavigate(BuildContext context) {
     try {
-      final details = _fireStore.collection("users").doc(loggedUser).update({
+      final details = _fireStore.collection("parents").doc(loggedUser).update({
         "Occupation": job.text,
         "Father": father.text,
         "Mother": mother.text,
@@ -225,11 +225,12 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
                               top: 18, bottom: 25, right: 15),
                           child: TextButton(
                             onPressed: () {
-                              Navigator.push(
-                                  context,
-                              MaterialPageRoute(
-                                  builder: ((context) => const ParentProfile())
-                              ));
+                              // Navigator.push(
+                              //     context,
+                              // MaterialPageRoute(
+                              //     builder: ((context) => const ParentProfile())
+                              // ));
+                              getItemAndNavigate(context);
                             },
                             child: const Icon(Icons.arrow_forward_rounded,
                                 size: 30, color: Colors.white),

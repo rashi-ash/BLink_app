@@ -166,7 +166,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: ((context) => const SignUp())
+                                        builder: ((context) =>  const SignUp(user_n: 'Teachers',))
                                     ));
                               },
                               child: const Text(

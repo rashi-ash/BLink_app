@@ -4,11 +4,12 @@ import 'package:blink/Contents/teacher-profile-edit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import 'functions/const.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  final String user_n;
+
+  const SignUp({Key? key,required this.user_n}) : super(key: key);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -35,7 +36,7 @@ class _SignUpState extends State<SignUp> {
           email: email, password: password);
 
       await FirebaseFirestore.instance
-          .collection('users')
+          .collection(widget.user_n)
           .doc(authResult.user?.uid)
           .set({
         'fullName': fullName,

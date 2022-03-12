@@ -38,7 +38,7 @@ class _ParentProfileState extends State<ParentProfile> {
   dynamic getDetails(String user) async {
     print(user);
     if(loggedUser.length > 25){
-      final detail = await _fireStore.collection("users").doc(user).get();
+      final detail = await _fireStore.collection("parents").doc(user).get();
       setState(() {
         nameHolder = detail.data()?['fullName'] ?? "name";
         jobHolder = detail.data()?['Occupation'] ?? "occupation";
@@ -46,6 +46,7 @@ class _ParentProfileState extends State<ParentProfile> {
         fathertHolder=detail.data()?['Father'] ?? "father";
         mobileHolder = detail.data()?['phone'] ?? "phone";
         altMobileHolder = detail.data()?['AlternateMobileNumber'] ?? "AlternateMobileNumber";
+        print( detail.data()?['AlternateMobileNumber'] ?? "AlternateMobileNumber");
       });
     }else{
       var message = 'Not loggedIn';
@@ -105,9 +106,9 @@ class _ParentProfileState extends State<ParentProfile> {
                     const SizedBox(
                       height: 20,
                     ),
-                    const CircleAvatar(
+                     CircleAvatar(
                       radius: 40,
-                      backgroundColor: Color(0xffFDF9F9),
+                      child: Image.asset('images/parent-profile.png'),
                     ),
                     const SizedBox(
                       height: 40,

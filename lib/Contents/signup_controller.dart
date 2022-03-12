@@ -8,5 +8,4 @@ class SignUpController extends GetxController{
     isProficPicPathSet.value = true;
   }
 
-
 }

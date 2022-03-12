@@ -41,7 +41,7 @@ class _StudentProfileState extends State<StudentProfile> {
   dynamic getDetails(String user) async {
     print(user);
     if(loggedUser.length > 25){
-      final detail = await _fireStore.collection("users").doc(user).get();
+      final detail = await _fireStore.collection("students").doc(user).get();
       setState(() {
         nameHolder = detail.data()?['fullName'] ?? "name";
         parentHolder = detail.data()?['GuardianName'] ?? "parent name";

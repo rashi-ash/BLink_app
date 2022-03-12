@@ -167,7 +167,7 @@ class _ParentLoginState extends State<ParentLogin> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: ((context) => const SignUp())
+                                        builder: ((context) =>  const SignUp(user_n: 'parents',))
                                     ));
                               },
                               child: const Text(
