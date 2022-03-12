@@ -1,13 +1,21 @@
 
-
 import 'package:flutter/material.dart';
 
 const teacherattndnctxt = TextStyle(
-    // color: Colors.black87,
+  // color: Colors.black87,
     color: Color(0xff696868),
     fontFamily: 'Roboto',
     fontSize: 20,
     fontWeight: FontWeight.normal);
+
+const timetabletext = TextStyle(
+    color: Colors.black,
+    fontFamily: 'Rockwell',
+    fontSize: 17,
+    fontWeight: FontWeight.bold);
+
+const timetablenum = TextStyle(
+    fontFamily: 'Rockwell', fontSize: 27, fontWeight: FontWeight.w400);
 
 const kTextFieldDecoration= BoxDecoration(
 gradient: LinearGradient(

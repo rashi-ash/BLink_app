@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class TeacherAttendanceChechlistCard extends StatefulWidget {
@@ -22,6 +23,24 @@ class _TeacherAttendanceChechlistCardState
       print(attends);
     }
   }
+  _addAttendance() {
+    FirebaseFirestore.instance
+        .collection('Attendance')
+        .doc(DateTime.now().toString())
+        .set({
+      'date': DateTime.now(),
+      'present': attends,
+    });
+  }
+
+  @override
+  void initState() {
+    setState(() {
+      attends = 0;
+    });
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {

@@ -6,12 +6,14 @@ class StudentListCard extends StatelessWidget {
   final String rollNo;
   final String dept;
   final String image;
+  final Widget path;
   const StudentListCard(
       {Key? key,
       required this.name,
       required this.rollNo,
       required this.dept,
-      required this.image})
+      required this.image,
+         required this.path})
       : super(key: key);
 
   @override
@@ -72,7 +74,7 @@ class StudentListCard extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const Chat()),
+                          MaterialPageRoute(builder: (context) => path),
                         );
                       },
                       child: const Icon(

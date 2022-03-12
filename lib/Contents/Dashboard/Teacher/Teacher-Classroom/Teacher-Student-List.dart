@@ -1,7 +1,9 @@
 import 'package:blink/Contents/Functions/const.dart';
 import 'package:flutter/material.dart';
 
+import '../../Chat/chat.dart';
 import 'StudentCard.dart';
+import 'package:blink/Contents/Dashboard/Teacher/Teacher-Student-Details-Page.dart';
 
 class TeacherStudentList extends StatelessWidget {
   const TeacherStudentList({Key? key}) : super(key: key);
@@ -64,40 +66,103 @@ class TeacherStudentList extends StatelessWidget {
                 child: ListView(
                   children: const [
                     StudentListCard(
+
                       dept: 'Computer Science',
                       image: 'images/student-1.jpg',
                       name: 'Louis Barell',
                       rollNo: 'Roll no: 61',
+                      path: TeacherStudentDetailsPage(
+                        name: 'Luois Barell',
+                        adno: '9748',
+                        dep: 'Computer Science',
+                        mail: 'loui@gmail.com',
+                        parent: 'Marcues',
+                        pmail: 'marcues01@gmai.com',
+                        pno: '97184523985',
+                        yr: '3',
+                      ),
                     ),
                     StudentListCard(
+
                       dept: 'Computer Science',
                       image: 'images/student-4.jpg',
                       name: 'Jane Lovey',
                       rollNo: 'Roll no: 62',
+                      path: TeacherStudentDetailsPage(
+                        name: 'Jane Lovey',
+                        adno: '9749',
+                        dep: 'Computer Science',
+                        mail: 'jane@gmail.com',
+                        parent: 'Luois',
+                        pmail: 'Luois@gmail.com',
+                        pno: '8754632148',
+                        yr: '3',
+                      ),
                     ),
                     StudentListCard(
+
                       dept: 'Computer Science',
                       image: 'images/student-5.jpg',
                       name: 'John Lind',
                       rollNo: 'Roll no: 63',
+                      path: TeacherStudentDetailsPage(
+                        name: 'Luois Barell',
+                        adno: 'Luois',
+                        dep: 'Luois',
+                        mail: 'Luois',
+                        parent: 'Luois',
+                        pmail: 'Luois',
+                        pno: 'Luois',
+                        yr: 'Luois',
+                      ),
                     ),
                     StudentListCard(
                       dept: 'Computer Science',
                       image: 'images/student-3.jpg',
                       name: 'Amy Admas',
                       rollNo: 'Roll no: 64',
+                      path: TeacherStudentDetailsPage(
+                        name: 'Luois Barell',
+                        adno: 'Luois',
+                        dep: 'Luois',
+                        mail: 'Luois',
+                        parent: 'Luois',
+                        pmail: 'Luois',
+                        pno: 'Luois',
+                        yr: 'Luois',
+                      ),
                     ),
                     StudentListCard(
                       dept: 'Computer Science',
                       image: 'images/student-2.jpg',
                       name: 'Jack Daniel',
                       rollNo: 'Roll no: 65',
+                      path: TeacherStudentDetailsPage(
+                        name: 'Luois Barell',
+                        adno: 'Luois',
+                        dep: 'Luois',
+                        mail: 'Luois',
+                        parent: 'Luois',
+                        pmail: 'Luois',
+                        pno: 'Luois',
+                        yr: 'Luois',
+                      ),
                     ),
                     StudentListCard(
                       dept: 'Computer Science',
                       image: 'images/student-6.jpg',
                       name: 'Natasha',
                       rollNo: 'Roll no: 65',
+                      path: TeacherStudentDetailsPage(
+                        name: 'Luois Barell',
+                        adno: 'Luois',
+                        dep: 'Luois',
+                        mail: 'Luois',
+                        parent: 'Luois',
+                        pmail: 'Luois',
+                        pno: 'Luois',
+                        yr: 'Luois',
+                      ),
                     ),
                   ],
                 ),
