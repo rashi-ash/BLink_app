@@ -1,31 +1,28 @@
-
+import 'package:blink/Contents/parent-profile-edit.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'Dashboard/Student/Student-dashboard.dart';
 import 'functions/const.dart';
-import 'package:blink/Contents/functions/profileView.dart';
-
-class StudentProfile extends StatefulWidget {
-
-  const StudentProfile({
-    Key? key,
-  }) : super(key: key);
+import 'functions/profileView.dart';
+class ParentProfile extends StatefulWidget {
+  const ParentProfile({Key? key}) : super(key: key);
 
   @override
-  _StudentProfileState createState() => _StudentProfileState();
+  _ParentProfileState createState() => _ParentProfileState();
 }
 
-class _StudentProfileState extends State<StudentProfile> {
+class _ParentProfileState extends State<ParentProfile> {
+
   String nameHolder = "name";
-  String parentHolder = "name";
-  String deptHolder = "department";
-  String emailHolder = "email";
-  String yearHolder = "year";
-  String adHolder = "adno";
+  String altMobileHolder = "0000000000";
+  String motherHolder = "Mother";
+  String jobHolder = "occupation";
+  String fathertHolder = "father";
+  String mobileHolder = "0000000000";
   final _auth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance;
   String loggedUser ="no uid";
+
 
   void getUserID() {
     try {
@@ -44,11 +41,11 @@ class _StudentProfileState extends State<StudentProfile> {
       final detail = await _fireStore.collection("users").doc(user).get();
       setState(() {
         nameHolder = detail.data()?['fullName'] ?? "name";
-        parentHolder = detail.data()?['GuardianName'] ?? "parent name";
-        deptHolder = detail.data()?['Department'] ?? "department";
-        emailHolder = detail.data()?['email'] ?? "email";
-        yearHolder = detail.data()?['Year'] ?? "year";
-        adHolder = detail.data()?['AdmissionNumber'] ?? "admission number";
+        jobHolder = detail.data()?['Occupation'] ?? "occupation";
+        motherHolder = detail.data()?['Mother'] ?? "mother";
+        fathertHolder=detail.data()?['Father'] ?? "father";
+        mobileHolder = detail.data()?['phone'] ?? "phone";
+        altMobileHolder = detail.data()?['AlternateMobileNumber'] ?? "AlternateMobileNumber";
       });
     }else{
       var message = 'Not loggedIn';
@@ -78,12 +75,13 @@ class _StudentProfileState extends State<StudentProfile> {
     getDetails(loggedUser);
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          decoration: kTextFieldDecoration,
+          decoration:kTextFieldDecoration,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
@@ -107,12 +105,12 @@ class _StudentProfileState extends State<StudentProfile> {
                     const SizedBox(
                       height: 20,
                     ),
-                    CircleAvatar(
-                      radius: 55,
-                      child: Image.asset('images/student-profile.png'),
+                    const CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Color(0xffFDF9F9),
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 40,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 50, right: 50),
@@ -126,25 +124,26 @@ class _StudentProfileState extends State<StudentProfile> {
                           padding: const EdgeInsets.fromLTRB(40, 40, 40, 10),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ProfileView(
-                                text: nameHolder,
-                              ),
-                              ProfileView(
-                                text: parentHolder,
-                              ),
-                              ProfileView(
-                                text: emailHolder,
-                              ),
-                              ProfileView(
-                                text: deptHolder,
-                              ),
-                              ProfileView(
-                                text: yearHolder,
-                              ),
-                              ProfileView(
-                                text: adHolder,
-                              ),
+                            children:
+                           [
+                             ProfileView(
+                                 text: nameHolder,
+                               ),
+                             ProfileView(
+                               text: jobHolder,
+                             ),
+                             ProfileView(
+                               text: motherHolder,
+                             ),
+                             ProfileView(
+                               text: fathertHolder,
+                             ),
+                             ProfileView(
+                               text: mobileHolder,
+                             ),
+                             ProfileView(
+                               text: altMobileHolder,
+                             ),
                             ],
                           ),
                         ),
@@ -154,17 +153,21 @@ class _StudentProfileState extends State<StudentProfile> {
                       height: 15,
                     ),
                     Padding(
-                      padding:
-                          const EdgeInsets.only(top: 5, left: 10, right: 10),
+                      padding: const EdgeInsets.only(top: 10,left: 10,right: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.only(bottom: 10, left: 25),
+                            padding: const EdgeInsets.only(bottom: 10, left: 25),
                             child: TextButton(
-                              onPressed: () => goBack(context),
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => const ParentProfileEdit())
+                                    ));
+                              },
                               child: const Text(
                                 ' Edit Profile',
                                 style: TextStyle(
@@ -176,20 +179,14 @@ class _StudentProfileState extends State<StudentProfile> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15)),
                                   textStyle: const TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.w800)),
+                                      fontSize: 19, fontWeight: FontWeight.w800)),
                             ),
                           ),
                           Padding(
-                            padding:
-                                const EdgeInsets.only(bottom: 10, right: 15),
+                            padding: const EdgeInsets.only(bottom: 10, right: 15),
                             child: TextButton(
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: ((context) =>
-                                            const StudentDashboard())));
+                                //Navigator.pushNamed(context, '/StudentProfile');
                               },
                               child: const Icon(Icons.arrow_forward_rounded,
                                   size: 30, color: Colors.white),
@@ -211,10 +208,4 @@ class _StudentProfileState extends State<StudentProfile> {
       ),
     );
   }
-
-  goBack(BuildContext context) {
-    Navigator.pop(context);
-  }
 }
-
-
