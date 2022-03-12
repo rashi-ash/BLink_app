@@ -4,6 +4,7 @@ import 'package:blink/Contents/functions/profileView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'Dashboard/Teacher/TeacherSideBarLayout.dart';
 import 'functions/const.dart';
 
 class TeacherProfile extends StatefulWidget {
@@ -190,7 +191,11 @@ class _TeacherProfileState extends State<TeacherProfile> {
                                 const EdgeInsets.only(bottom: 10, right: 15),
                             child: TextButton(
                               onPressed: () {
-                                //Navigator.pushNamed(context, '/StudentProfile');
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) =>
+                                            const TeacherSBLayout())));
                               },
                               child: const Icon(Icons.arrow_forward_rounded,
                                   size: 30, color: Colors.white),

@@ -2,13 +2,24 @@
 
 import 'package:flutter/material.dart';
 
-import '../SignUp.dart';
+const teacherattndnctxt = TextStyle(
+    // color: Colors.black87,
+    color: Color(0xff696868),
+    fontFamily: 'Roboto',
+    fontSize: 20,
+    fontWeight: FontWeight.normal);
 
 const kTextFieldDecoration= BoxDecoration(
 gradient: LinearGradient(
 begin: Alignment.topCenter,
 end: Alignment.bottomCenter,
 colors: [Color(0xffF9FFED), Color(0xffA4DADA)]),
+);
+const kTextFieldDecoration2 = BoxDecoration(
+  gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [Color(0xffFAFFE8), Color(0xff94DFDF)]),
 );
 const kTextStyle=TextStyle(
 // color: Colors.black87,

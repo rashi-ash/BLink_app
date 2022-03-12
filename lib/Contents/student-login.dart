@@ -1,12 +1,13 @@
-import 'package:blink/Contents/Dashboard/Student-dashboard.dart';
+
 import 'package:blink/Contents/SignUp.dart';
 import 'package:blink/Contents/signup_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'Dashboard/Student/Student-dashboard.dart';
 import 'functions/const.dart';
-import 'package:blink/Contents/student-profile-view.dart';
+// import 'package:blink/Contents/student-profile-view.dart';
 
 class StudentLogin extends StatefulWidget {
   const StudentLogin({Key? key}) : super(key: key);
@@ -30,10 +31,17 @@ class _StudentLoginState extends State<StudentLogin> {
     });
     try {
          await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: ((context) => const StudentProfile())));
+         Navigator.pushAndRemoveUntil(
+           context,
+           MaterialPageRoute(
+             builder: (BuildContext context) => const StudentDashboard(),
+           ),
+               (route) => false,
+         );
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: ((context) => const StudentProfile())));
         setState(() {
           _isLoading = false;
         });
@@ -78,22 +86,7 @@ class _StudentLoginState extends State<StudentLogin> {
                       const SizedBox(
                         height: 80,
                       ),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.end,
-                      //   children: const [
-                      //     Text(
-                      //       'Login',
-                      //       style: TextStyle(
-                      //           color: Color(0xffABAAAA),
-                      //           // color: Color(0xff388A75),
-                      //           fontFamily: 'Roboto',
-                      //           fontSize: 20),
-                      //     ),
-                      //     SizedBox(
-                      //       width: 40,
-                      //     )
-                      //   ],
-                      // ),
+
                       login,
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.center,

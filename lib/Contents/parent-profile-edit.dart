@@ -1,8 +1,13 @@
+import 'dart:io';
+import 'package:blink/Contents/signup_controller.dart';
+import 'package:get/get.dart';
 import 'package:blink/Contents/parent-profile-view.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'functions/const.dart';
+import 'package:image_picker/image_picker.dart';
+import 'functions/sform.dart';
 
 class ParentProfileEdit extends StatefulWidget {
   const ParentProfileEdit({Key? key}) : super(key: key);
@@ -12,6 +17,57 @@ class ParentProfileEdit extends StatefulWidget {
 }
 
 class _ParentProfileEditState extends State<ParentProfileEdit> {
+
+  final _auth = FirebaseAuth.instance;
+  final _fireStore = FirebaseFirestore.instance;
+  String? loggedUser;
+
+  File? pickedFile;
+  ImagePicker imagePicker = ImagePicker();
+
+  SignUpController signUpController = Get.find();
+
+  final name = TextEditingController();
+  final job = TextEditingController();
+  final father = TextEditingController();
+  final mother = TextEditingController();
+  final mobile = TextEditingController();
+  final altmobile = TextEditingController();
+  getItemAndNavigate(BuildContext context) {
+    try {
+      final details = _fireStore.collection("users").doc(loggedUser).update({
+        "Occupation": job.text,
+        "Father": father.text,
+        "Mother": mother.text,
+        "AlternateMobileNumber": altmobile.text,
+      });
+
+      Navigator.push(
+          context, MaterialPageRoute(builder: ((context) => const ParentProfile())));
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  void getUserID() async {
+    try {
+      final users = await _auth.currentUser;
+      if (users != null) {
+        loggedUser = users.uid;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getUserID();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -43,113 +99,98 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
                     const SizedBox(
                       height: 20,
                     ),
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor: const Color(0xffFDF9F9).withOpacity(0.99),
+                    //
+                    Center(
+                      child: Stack(
+                        children: [
+                          const SizedBox(
+                            width: 115,
+                            height: 100,
+                          ),
+                          Obx(() => CircleAvatar(
+                            radius: 55,
+                            backgroundImage:
+                            signUpController.isProficPicPathSet.value ==
+                                true
+                                ? FileImage(File(signUpController
+                                .profilePicPath
+                                .value)) as ImageProvider
+                                : const AssetImage(
+                                'images/parent-profile.png'),
+                          )),
+                          Positioned(
+                            bottom: 6,
+                            right: 3,
+                            child: ClipOval(
+                              child: Container(
+                                height: 35,
+                                width: 35,
+                                color: const Color(0xff00B8B8),
+                                child: InkWell(
+                                  child: const Icon(
+                                    Icons.camera_alt_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  onTap: () {
+                                    showModalBottomSheet(
+                                        context: context,
+                                        backgroundColor:
+                                        const Color(0xffF7FFE8),
+                                        shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(30),
+                                          ),
+                                        ),
+                                        builder: (context) =>
+                                            bottomSheet(context));
+                                  },
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 45, bottom: 5, left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
-                          hintText: "Full Name",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.39),
-                        ),
-                        keyboardType: TextInputType.name,
-                      ),
+                      child:
+                       Formfield(
+                        controllers: name,
+                        hintText: "full name",
+                        type: TextInputType.name),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 5,  left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
+                      child: Formfield(
+                          controllers: job,
                           hintText: "Occupation",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.38),
-                        ),
-                        keyboardType: TextInputType.text,
-                        obscureText: true,
-                      ),
+                          type: TextInputType.name),
+
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 50, right: 50, top: 10, bottom: 10),
                       child: Row(
                         children: [
                           Expanded(
-                            child: TextField(
-                              cursorColor: const Color(0xff46665E),
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    horizontal: 30, vertical: 20),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: const BorderSide(
-                                    width: 0,
-                                    style: BorderStyle.none,
-                                  ),
-                                ),
-                                filled: true,
-                                hintStyle:
-                                const TextStyle(color: Color(0xffABAAAA)),
+                            child:Formfield(
+                                controllers: father,
                                 hintText: "Father",
-                                fillColor:
-                                const Color(0xffFDF9F9).withOpacity(0.39),
-                              ),
-                              keyboardType: TextInputType.name,
-                            ),
+                                type: TextInputType.name),
+
                           ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
-                              child: TextField(
-                                cursorColor: const Color(0xff46665E),
-
-                                decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 30, vertical: 20),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    borderSide: const BorderSide(
-                                      width: 0,
-                                      style: BorderStyle.none,
-                                    ),
-                                  ),
-                                  filled: true,
-                                  hintStyle:
-                                  const TextStyle(color: Color(0xffABAAAA)),
+                              child:
+                              Formfield(
+                                  controllers: mother,
                                   hintText: "Mother",
-                                  fillColor:
-                                  const Color(0xffFDF9F9).withOpacity(0.39),
-                                ),
-                                keyboardType: TextInputType.name,
-                              ),
+                                  type: TextInputType.name),
+
                             ),
                           ),
                         ],
@@ -158,54 +199,22 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
                     Padding(
                       padding: const EdgeInsets.only(
                           bottom: 10, left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
+                      child: Formfield(
+                          controllers: mobile,
                           hintText: "Mobile Number",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.39),
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
+                          type: TextInputType.name),
+
                     ),
 
 
                     Padding(
                       padding: const EdgeInsets.only(
                           bottom: 5, left: 50, right: 50),
-                      child: TextField(
-                        cursorColor: const Color(0xff46665E),
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 20),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                          filled: true,
-                          hintStyle:
-                          const TextStyle(color: Color(0xffABAAAA)),
+                      child: Formfield(
+                          controllers: altmobile,
                           hintText: "Alternative Mobile number",
-                          fillColor:
-                          const Color(0xffFDF9F9).withOpacity(0.35),
-                        ),
-                        keyboardType: TextInputType.phone,
-                      ),
+                          type: TextInputType.name),
+
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -243,3 +252,78 @@ class _ParentProfileEditState extends State<ParentProfileEdit> {
     );
   }
 }
+Widget bottomSheet(BuildContext context) {
+  Size size = MediaQuery.of(context).size;
+  return Container(
+    width: double.infinity,
+    height: size.height * 0.2,
+    margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+    child: Column(
+      children: [
+        const Text(
+          'Choose Profile Photo',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            InkWell(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.image, size: 35),
+                  ),
+                  Text(
+                    'Gallery',
+                    style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  )
+                ],
+              ),
+              onTap: () {
+                takephoto(ImageSource.gallery);
+              },
+            ),
+            const SizedBox(
+              width: 70,
+            ),
+            InkWell(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Icon(Icons.camera_alt, size: 35),
+                  ),
+                  Text(
+                    'Camera',
+                    style:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  )
+                ],
+              ),
+              onTap: () {
+                takephoto(ImageSource.camera);
+              },
+            )
+          ],
+        )
+      ],
+    ),
+  );
+}
+
+Future<void> takephoto(ImageSource source) async {
+ dynamic imagePicker;
+  final pickedImage =
+  await imagePicker.pickImage(source: source, imageQuality: 100);
+  var pickedFile = File(pickedImage!.path);
+  dynamic signUpController;
+  signUpController.setProfileImagePath(pickedFile.path);
+}
+

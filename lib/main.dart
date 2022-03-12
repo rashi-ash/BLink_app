@@ -1,3 +1,4 @@
+import 'package:blink/Contents/functions/Homesceen.dart';
 import 'package:blink/Contents/home.dart';
 import 'package:blink/Contents/student.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapshot) {
           if (userSnapshot.hasData) {
-            return const Landing();
+            return const HomeScreen();
             // return const Student1();
           }
           return const Landing();
