@@ -5,14 +5,16 @@ class AttendanceCard extends StatelessWidget {
   final String subtitle;
   final String date;
   final String day;
-  final String time;
+  final String attendees;
+  final String totalStudents;
   const AttendanceCard(
       {Key? key,
       required this.title,
       required this.subtitle,
       required this.day,
       required this.date,
-      required this.time})
+        required this.attendees,
+        required this.totalStudents,})
       : super(key: key);
 
   @override
@@ -79,12 +81,23 @@ class AttendanceCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            fontFamily: 'Rockwell',
-                            fontSize: 20,
-                          ),
+                        Row(
+                          children: [
+                            const Text(
+                              'Period: ',
+                              style: TextStyle(
+                                fontFamily: 'Rockwell',
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                fontFamily: 'Rockwell',
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(
                           height: 6,
@@ -113,7 +126,7 @@ class AttendanceCard extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            time,
+                            attendees,
                             style: const TextStyle(
                               fontSize: 17,
                               fontFamily: 'Rockwell',
@@ -124,9 +137,9 @@ class AttendanceCard extends StatelessWidget {
                             thickness: 1.5,
                             color: Colors.black,
                           ),
-                          const Text(
-                            '22',
-                            style: TextStyle(
+                          Text(
+                            totalStudents,
+                            style: const TextStyle(
                               fontSize: 17,
                               fontFamily: 'Rockwell',
                             ),

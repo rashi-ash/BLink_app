@@ -3,7 +3,8 @@ import 'package:blink/Contents/student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import '../Dashboard/Student/StudentSideBarLayout.dart';
+import '../Dashboard/Teacher/TeacherSideBarLayout.dart';
 import '../teacher.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,20 +17,35 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _auth = FirebaseAuth.instance;
   final _fireStore = FirebaseFirestore.instance;
+  String userType="Type";
   _getUserType() async {
     final user = _auth.currentUser;
     if (user != null) {
-      final data = await _fireStore.collection("users").doc(user.uid).get();
-      final userType = data.data()?['UserType'];
+      final dataP = await _fireStore.collection("parents").doc(user.uid).get();
+      final dataT = await _fireStore.collection("Teachers").doc(user.uid).get();
+      final dataS = await _fireStore.collection("students").doc(user.uid).get();
+      if(dataP.data()==null && dataT.data()==null){
+        setState(() {
+          userType = dataS.data()?['UserType'];
+        });
+      }else if(dataT.data()==null && dataS.data()==null){
+        setState(() {
+          userType = dataP.data()?['UserType'];
+        });
+      }else{
+        setState(() {
+          userType = dataT.data()?['UserType'];
+        });
+      }
 
       switch (userType) {
         case 'Student':
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: ((context) => const Student1())));
+              MaterialPageRoute(builder: ((context) => const TeacherSBLayout())));
           break;
         case 'student':
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: ((context) => const Student1())));
+              MaterialPageRoute(builder: ((context) => const StudentSBLayout())));
           break;
         case 'Parent':
           Navigator.pushReplacement(context,
@@ -41,11 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
           break;
         case 'Teacher':
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: ((context) => const Teacher1())));
+              MaterialPageRoute(builder: ((context) => const TeacherSBLayout())));
           break;
         case 'teacher':
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: ((context) => const Teacher1())));
+              MaterialPageRoute(builder: ((context) => const TeacherSBLayout())));
           break;
       }
     }

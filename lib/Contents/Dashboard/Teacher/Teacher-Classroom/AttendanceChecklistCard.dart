@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class TeacherAttendanceChechlistCard extends StatefulWidget {
-  const TeacherAttendanceChechlistCard({Key? key}) : super(key: key);
+  const TeacherAttendanceChechlistCard(this.markattendance);
+  final void Function() markattendance;
   @override
   State<TeacherAttendanceChechlistCard> createState() =>
       _TeacherAttendanceChechlistCardState();
@@ -40,7 +41,6 @@ class _TeacherAttendanceChechlistCardState
     });
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
